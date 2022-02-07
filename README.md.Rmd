@@ -10,18 +10,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 This is a repository for the programming with data class. It will be used to test out different functions on R and track any progress I make this semester.
 
- # **Introduction**
+# **Introduction**
 
- Hello! My name is Allison and I am a senior majoring in Psychology. 
+ Hello! My name is Allison and I am a senior majoring in Psychology, I am taking this class because I think being able to use R will help when applying to grad schools.
 
- ## **Here are some things about me**
+## **Fun facts**
 
-
- 1. I have 3 cats and 2 dogs. 
- 1. I walked off a 12 ft. porch on Sunday and fractured
-    the tip of my fibula.
- 1. I enjoy painting, reading, biking, and playing guitar.
+1. I'm from Maryland but have lived in Florida for 2 years now.
+1. I'll be taking a year off once I graduate to gain more research experience
+1. In my free time I paint and play guitar :)
 
 
- I look forward to a great semester and learning about
- coding with R!
+ I look forward to a great semester and learning about coding with R!
