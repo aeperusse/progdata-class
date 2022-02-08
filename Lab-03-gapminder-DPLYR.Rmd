@@ -1,0 +1,55 @@
+---
+title: "Lab 3"
+author: "Allison Perusse"
+date: "2/7/2022"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, load}
+library(gapminder)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+view(gapminder)
+```
+
+```{r}
+gapminder |>
+  filter(country %in% c("Italy","Taiwan", "Sweden") & year == 1970-1979)
+
+```
+  
+```{r}
+gapminder |>
+   filter(country %in% c("Italy", "Taiwan", "Sweden") & year == 1970-1979) |> 
+  select(country, gdpPercap) |>
+  print()
+```
+
+```{r}
+lifeExp_change <- gapminder |> 
+   arrange(year) |> 
+   group_by(country) |>
+   mutate(lifeExp_change = lifeExp - lag(lifeExp))
+ print(lifeExp_change)
+ 
+ lifeExp_change |>
+   tidyr::drop_na()
+ #how do you specify this to find ONLY the countries that experiences a drop in life exp? Only keep data from countries 
+```
+
+```{r}
+gapminder |>
+  group_by(country)|>
+  summarize(max = max(gdpPercap))
+```
+
+ 
+
+
