@@ -8,7 +8,7 @@ This is a repository for the programming with data class. It will be used to tes
 
 # **Introduction**
 
- Hello! My name is Allison and I am a senior majoring in Psychology, I am taking this class because I think being able to use R will help when applying to grad schools.
+ Hello! My name is Allison and I am a senior majoring in Psychology. I am taking this class because I think being able to use R will help when applying to grad schools.
 
 ## **Fun facts**
 
