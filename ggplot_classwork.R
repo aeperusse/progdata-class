@@ -1,5 +1,6 @@
 library(tidyverse)
 
+
 (mauna <- tsibble::as_tsibble(co2) |> 
   rename(month = index, conc = value))
 
