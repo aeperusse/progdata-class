@@ -278,7 +278,7 @@ See how the printing of the tibble now says it is grouped?
   
 ```{r}
 gapminder |>
-  group_by(continent, year) |>
+  group_by(contineent, year) |>
   summarize(mu = mean(lifeExp),
           sigma = sd(lifeExp))
 ```
