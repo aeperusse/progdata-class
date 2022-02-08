@@ -63,7 +63,8 @@ ggdist :: stat_slab(height = .3, color = "black", size = .2, alpha = .5, positio
 
 The distribution of the data is shown better through the raincloud plot, it shows the outliers better than the box plot as well.
 
-##Exercise 3
+###Exercise 3
+
 1. There is a positive relationship between the variables.
 ```{r}
 ggplot(plastic_waste) +
