@@ -4,11 +4,6 @@ author: "Allison Perusse"
 date: "1/24/2022"
 output: html_document
 ---
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 This is a repository for the programming with data class. It will be used to test out different functions on R and track any progress I make this semester.
 
 # **Introduction**
