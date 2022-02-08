@@ -10,3 +10,5 @@ tail(penguins)
 
 #This shows the structure of penguins
 str(penguins)
+
+
