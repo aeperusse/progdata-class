@@ -33,14 +33,15 @@ gapminder |>
 ```
 
 ```{r}
-lifeExp_change <- gapminder |> 
-   arrange(year) |> 
+new_gap <- gapminder |> 
+  arrange(year) |>
    group_by(country) |>
-   mutate(lifeExp_change = lifeExp - lag(lifeExp))
- print(lifeExp_change)
+   mutate(lifeExp_change = lifeExp - lag(lifeExp)) |>
+  filter(lifeExp_change < 0) |>
+  ungroup() |>
+  filter(lifeExp_change == min(lifeExp_change))
+ print(new_gap)
  
- lifeExp_change |>
-   tidyr::drop_na()
  #how do you specify this to find ONLY the countries that experiences a drop in life exp? Only keep data from countries 
 ```
 
@@ -49,6 +50,8 @@ gapminder |>
   group_by(country)|>
   summarize(max = max(gdpPercap))
 ```
+
+```{r}
 
  
 
