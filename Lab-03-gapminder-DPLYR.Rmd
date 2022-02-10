@@ -52,7 +52,11 @@ gapminder |>
 ```
 
 ```{r}
-
- 
+gapminder |>
+  filter(country %in% "Canada")|>
+  ggplot()|>
+  aes(x = log(gdpPercap), y = lifeExp)|>
+  geom_point(alpha = 0.1)
+```
 
 

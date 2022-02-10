@@ -225,6 +225,16 @@ library(ggplot2)</code></pre>
 ##  9 Bangladesh   1391.
 ## 10 Belgium     33693.
 ## # … with 132 more rows</code></pre>
+<pre class="r"><code>gapminder |&gt;
+  filter(country %in% &quot;Canada&quot;)|&gt;
+  ggplot()|&gt;
+  aes(x = log(gdpPercap), y = lifeExp)|&gt;
+  geom_point(alpha = 0.1)</code></pre>
+<pre><code>## Warning: Ignoring unknown aesthetics:</code></pre>
+<pre><code>## mapping: x = ~log(gdpPercap), y = ~lifeExp,  = ~ggplot(filter(gapminder, country %in% &quot;Canada&quot;)) 
+## geom_point: na.rm = FALSE
+## stat_identity: na.rm = FALSE
+## position_identity</code></pre>
 
 
 
