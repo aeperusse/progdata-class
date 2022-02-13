@@ -42,7 +42,6 @@ new_gap <- gapminder |>
   filter(lifeExp_change == min(lifeExp_change))
  print(new_gap)
  
- #how do you specify this to find ONLY the countries that experiences a drop in life exp? Only keep data from countries 
 ```
 
 ```{r}
@@ -54,15 +53,16 @@ gapminder |>
 ```{r}
 gapminder |>
   filter(country =="Canada")|>
-  ggplot()|>
-  aes(x = lifeExp, y = gdpPercap)|>
-  geom_point(alpha = 0.1)|>
-  scale_x_continuous("Life expectancy") |>
+  ggplot()+
+  aes(x = lifeExp, y = gdpPercap)+
+  geom_point(alpha = 0.1)+
+  scale_x_continuous("Life expectancy") +
   scale_y_continuous(name = "GDP per capita",
                      trans = "log10",
-                     labels = scales::dollar_format())|>
+                     labels = scales::dollar_format())+
   labs(title = "Canada's Life Expectancy vs. GDP per Capita")
 ```
+
 ```{r}
 library(palmerpenguins)
 
@@ -74,11 +74,11 @@ palmerpenguins::penguins|>
 ```
 
 ```{r}
-ggplot(palmerpenguins::penguins)|>
-  aes(x = bill_length_mm, y = flipper_length_mm) |>
-  geom_point(color = "green")|>
-  scale_x_continuous(name = "Bill Length") |>
-  scale_y_continuous("Flipper Length")|>
+ggplot(palmerpenguins::penguins)+
+  aes(x = bill_length_mm, y = flipper_length_mm)+
+  geom_point(color = "green")+
+  scale_x_continuous(name = "Bill Length") +
+  scale_y_continuous("Flipper Length")+
   labs(title = "Bill Length by Flipper Length")
 ```
 
@@ -98,7 +98,7 @@ ggplot(na.omit(palmerpenguins::penguins)) +
                     size = .2,
                     alpha = .5,
                     position = position_nudge(y = .2)) +
-  scale_x_continuous("Body Mass (g)") +
+  scale_x_continuous("Body Mass") +
   scale_y_discrete("Species") +
   labs(title = "Body Mass by Species")
 ```
