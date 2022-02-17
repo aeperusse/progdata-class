@@ -1,0 +1,159 @@
+---
+title: 'Lab4: Personality and green reputation'
+author: "Allison Perusse"
+date: "2/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+dictionary <- readr::read_csv(here::here("data", "green_dictionary.csv"))
+green_data <- readr::read_csv(here::here("data", "green_data.csv"))
+```
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+green_data |>
+  pull(open10) |>
+  unique()
+  
+green_data |>
+  select(-id)|>
+  unlist()|>
+  unique()
+```
+
+```{r}
+green_data<- green_data |>
+  mutate(
+    across(
+      -id,
+      \(x) recode(x, "1" = 1, "2" = 2, "3" = 3, "4" = 4, "5" = 5, "-99" = NA_real_)
+    )
+  )
+
+
+green_data<- green_data |>
+  mutate(
+    across(
+      -id,
+      \(x) na_if(x,-99)))
+
+reversed <- dictionary |> 
+  filter(Keying == -1)|>
+  pull(Item)
+
+green_data<- green_data |>
+  mutate(
+    green2 = max(green2, na.rm = TRUE) - green2 + min(green2, na.rm = TRUE),
+    comp6 = max(comp6, na.rm = TRUE) - min(comp6, na.rm = TRUE) - comp6
+  )
+
+green_data<- green_data |>
+  mutate(
+    across(
+      c(green2, comp6, comp7, comp8, comp9, comp10, intel7, intel8, intel9, intel10, open7, open8, open9, open10)
+    ))
+
+green_data<- green_data |>
+  mutate(
+    across(
+      all_of(reversed), 
+      \(x) recode(x,"1" = 5, "2" = 4, "3" = 3, "4" = 2, "5" = 1)))
+
+reverse_item <- \(x) recode(x,"1" = 5, "2" = 4, "3" = 3, "4" = 2, "5" = 1)
+
+reverse_item(1:5)
+
+    print(green_data)
+```
+#\(x) = making a new function
+#for computing total scores, first pull up dictionary
+
+```{r}
+green_data<- green_data |>
+  rowwise()|>
+  mutate(
+    green_total = mean(c_across(green1:green5), na.rm = TRUE),
+    comp_total = mean(c_across(comp1:comp10), na.rm = TRUE),
+    intel_total = mean(c_across(intel1:intel10),na.rm = TRUE),
+    open_total = mean(c_across(open1:open10), na.rm = TRUE), 
+    .before = everything())|>
+    ungroup()
+print(green_data)
+```
+
+```{r}
+(green_data$green_total -1)/(5-1)* 100
+
+green_data<- green_data |>
+  mutate(
+    across(
+      green_total:open_total, 
+      \(x) 100 * (x-1)/(5-1),
+      .names = "{.col}_pomp"
+    ),
+    .after = open_total
+  )
+print(green_data)
+
+ggplot(green_data) +
+  aes(x = green_total_pomp)+
+  geom_histogram()
+
+green_data |>
+  drop_na(student)
+
+green_data |>
+  filter(!is.na(student))|>
+ggplot()+
+  aes(x = open_total_pomp, y = green_total_pomp, color = 
+  factor(student))+
+  geom_point()+
+  geom_smooth(method = "lm")
+  
+```
+##These plots show that there is no significant difference between students and non-students
+
+ 
+```{r}
+  green_data <- green_data |> mutate(green_data, Student = factor(student, levels = c("1", "2"), labels = c("no", "yes")))
+print(green_data)
+
+green_data |>
+  filter(!is.na(Student)) |>
+  ggplot() +
+  aes(x = green_total_pomp, y = Student, color = Student, fill = Student) +
+  geom_jitter(height = .15) +
+  geom_boxplot(color = "green", 
+               alpha = .5, 
+               width = .1,
+               size = .5) +
+  ggdist::stat_slab(height = .3, 
+                    color = "black",
+                    size = .2,
+                    alpha = .5,
+                    position = position_nudge(y = .2))
+  
+```
+
+```{r}
+green_data |>
+  group_by(Student) |>
+  summarize(
+    across(
+      green_total_pomp:open_total_pomp,
+      mu = mean(),
+      sigma = sd(),
+      median = median (), 
+      min = min(),
+      max = max()))
+```
