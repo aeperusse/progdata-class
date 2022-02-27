@@ -1,0 +1,58 @@
+---
+title: 'Lab 5B: Multivariate Pivoting'
+author: "Allison Perusse"
+date: "2/24/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+set.seed(123)
+missing_w2_parent <- sample(1:500, 30)
+missing_w2_child <- c(missing_w2_parent[1:5], sample(1:500, 25))
+family  <- read_csv(
+  "https://raw.githubusercontent.com/bwiernik/progdata/main/inst/tutorials/data/family_data.csv"
+) |> 
+  mutate(
+    across(
+      starts_with("w2") & contains("parent"),
+      ~ ifelse(family_id %in% missing_w2_parent, NA_real_, .x)
+    ),
+    across(
+      starts_with("w2") & contains("child"),
+      ~ ifelse(family_id %in% missing_w2_child, NA_real_, .x)
+    )
+  )
+```
+
+```{r}
+family |> 
+  DT::datatable(rownames = FALSE)
+```
+
+```{r}
+family_longest <- family |>
+  pivot_longer(
+    col = -family_id,
+    names_to = c("wave", ".value", "family_member"),
+    names_sep = "_",
+    values_drop_na = TRUE
+  )
+print(family_longest)
+
+family_long <- family |>
+  pivot_longer(
+    col = w1_comm_parent:w2_satis_child,
+    names_to = c("wave", ".value", "family_member"),
+    names_sep = "_",
+    values_drop_na = TRUE)
+print(family_long)
+
+
+    
+```
+  
