@@ -1,0 +1,42 @@
+---
+title: "Tibble Joins"
+author: "Allison Perusse"
+date: "2/24/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+songs <- read_csv("https://raw.githubusercontent.com/bwiernik/progdata-class/master/data/singer/songs.csv")
+locations <- read_csv("https://raw.githubusercontent.com/bwiernik/progdata-class/master/data/singer/loc.csv")
+
+(time <- as_tibble(songs) |> 
+   rename(song = title))
+
+(album <- as_tibble(locations) |> 
+   select(title, everything()) |> 
+   rename(album = release,
+          song  = title))
+```
+
+```{r}
+time |>
+ left_join(album, by = "song")
+
+time |> 
+  left_join(album, by = c("artist_name", "song"))
+```
+
+```{r}
+time |>
+  semi_join(album)
+```
