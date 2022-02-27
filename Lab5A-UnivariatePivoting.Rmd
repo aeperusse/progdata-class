@@ -1,0 +1,34 @@
+---
+title: "Lab5A: Univariate Pivoting"
+author: "Allison Perusse"
+date: "2/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+lotr  <- read_csv("https://raw.githubusercontent.com/jennybc/lotr-tidy/master/data/lotr_tidy.csv") |> 
+  rename(Species = Race)
+```
+```{r}
+print(lotr)
+```
+
+
+```{r}
+(lotr_wide <- lotr |> 
+  pivot_wider(id_cols = c(-Species, -Words), 
+              names_from = Species,
+              values_from = Words))
+```
+
+```{r}
+lotr_wide |> 
+  pivot_longer(cols = Elf:Man, 
+               names_to  = "Species", 
+               values_to = "Words")
+```
