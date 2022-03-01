@@ -3,6 +3,7 @@ install.packages("psychTools")
 library(dplyr)
 library(tidyverse)
 library(ggplot2)
+library(psychTools)
 
 dat_bfi <- psychTools::bfi |>
   rownames_to_column(var = ".id")|>
@@ -29,10 +30,11 @@ dat_bfi |>
       )
     )
   )
+
 dat_bfi |>
   mutate(A1r = recode
-         ( A1, "6" = 1, "5" = 2, "4" = 3, "3" = 4, "2" = 5, "1" = 6) |>
-  select(A1, A1r) |> 
+         (A1, "6" = 1, "5" = 2, "4" = 3, "3" = 4, "2" = 5, "1" = 6) |>
+  select(A1, A1r)) |> 
   head()
 
 #or
@@ -54,6 +56,7 @@ reversed <- dict |>
   filter(Keying == -1) |>
   pull(item)
 
+#to apply the same function to multiple different rows.
 dat_bfi |>
   mutate(across
          (all_of(reversed), 
@@ -62,4 +65,17 @@ dat_bfi |>
          )) |>
   head()
 
-
+#rowwise- treat every row of data as its own separate group
+dat_bfi |>
+  rowwise() |> 
+  mutate(
+    .id = .id,
+    A_total = mean(c_across(A1:A5), na.rm = TRUE),
+    C_total = mean(c_across(C1:C5), na.rm = TRUE),
+    E_total = mean(c_across(E1:E5), na.rm = TRUE),
+    N_total = mean(c_across(N1:N5), na.rm = TRUE),
+    O_total = mean(c_across(O1:O5), na.rm = TRUE),
+    .before = everything()
+  ) |>
+  ungroup()|>
+  head()

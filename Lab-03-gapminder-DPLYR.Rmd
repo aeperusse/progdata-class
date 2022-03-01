@@ -42,6 +42,7 @@ new_gap <- gapminder |>
   filter(lifeExp_change == min(lifeExp_change))
  print(new_gap)
  
+ #how do you specify this to find ONLY the countries that experiences a drop in life exp? Only keep data from countries 
 ```
 
 ```{r}
@@ -52,53 +53,23 @@ gapminder |>
 
 ```{r}
 gapminder |>
-  filter(country =="Canada")|>
-  ggplot()+
-  aes(x = lifeExp, y = gdpPercap)+
-  geom_point(alpha = 0.1)+
-  scale_x_continuous("Life expectancy") +
-  scale_y_continuous(name = "GDP per capita",
-                     trans = "log10",
-                     labels = scales::dollar_format())+
-  labs(title = "Canada's Life Expectancy vs. GDP per Capita")
+  filter(country %in% "Canada")|>
+  ggplot()|>
+  aes(x = gdpPercap, y = lifeExp) |>
+  geom_point(alpha = 0.1) |>
+  scale_x_log10()
 ```
 
 ```{r}
-library(palmerpenguins)
+library(psychTools)
 
-palmerpenguins::penguins|>
-  summarize(mean_billlength = mean(bill_length_mm, na.rm = TRUE),
-            sd_billlength = sd(bill_length_mm, na.rm = TRUE),
-            mean_flipperlength = mean(flipper_length_mm, na.rm = TRUE),
-            sd_flipperlength = sd(flipper_length_mm, na.rm = TRUE))
+glimpse(psychTools::bfi)
 ```
 
 ```{r}
-ggplot(palmerpenguins::penguins)+
-  aes(x = bill_length_mm, y = flipper_length_mm)+
-  geom_point(color = "green")+
-  scale_x_continuous(name = "Bill Length") +
-  scale_y_continuous("Flipper Length")+
-  labs(title = "Bill Length by Flipper Length")
-```
+psychTools::bfi |>
+  group_by()
 
-```{r}
-ggplot(na.omit(palmerpenguins::penguins)) +
-  aes(y = species, 
-      x = body_mass_g,
-      fill = species,
-      color = species) +
-  geom_jitter(height = .15) +
-  geom_boxplot(color = "black",
-               alpha = .5,
-               width = .1,
-               size = .5) +
-  ggdist::stat_slab(height = .3,
-                    color = "black",
-                    size = .2,
-                    alpha = .5,
-                    position = position_nudge(y = .2)) +
-  scale_x_continuous("Body Mass") +
-  scale_y_discrete("Species") +
-  labs(title = "Body Mass by Species")
-```
+
+
+
