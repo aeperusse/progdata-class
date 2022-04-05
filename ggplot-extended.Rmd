@@ -1,0 +1,62 @@
+---
+title: "ggplot"
+author: "Allison Perusse"
+date: "3/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+```
+
+```{r}
+bw <- .3
+
+h1 <- ggplot(mpg) +
+  aes(x = displ) +
+  geom_histogram(binwidth = bw, fill = "skyblue")
+
+## histogram with density
+h2 <- ggplot(mpg) +
+  aes(x = displ) +
+  geom_histogram(aes(y = after_stat(density)),
+                 binwidth = bw, fill = "skyblue")
+
+## histogram with proportion
+h3 <- ggplot(mpg) +
+  aes(x = displ) +
+  geom_histogram(aes(y = after_stat(count / sum(count))),
+                 binwidth = bw, fill = "skyblue")
+
+h1 + h2 + h3
+
+## histogram with density curve
+ggplot(mpg) +
+  aes(displ) +
+    geom_histogram(aes(y = after_stat(count)), 
+                   binwidth = bw, fill = "skyblue") +
+    geom_density(aes(y = after_stat(count) * bw)) +
+    theme_minimal()
+
+```
+
+```{r}
+ggplot(mtcars) + 
+  aes(
+    x = hp, y = mpg, 
+    color = factor(cyl), 
+    shape = hp > 200
+  ) + 
+  geom_point(size = 3) + 
+  scale_x_continuous(
+    limits = c(0, 200), 
+    oob = scales::oob_squish
+  )
+```
+
