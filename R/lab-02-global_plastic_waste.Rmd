@@ -57,7 +57,7 @@ ggplot(plastic_waste) +
   geom_boxplot(color = "black",
                alpha = .5,
                width = .1,
-               size = .5) +
+               size = .5)  +
 ggdist :: stat_slab(height = .3, color = "black", size = .2, alpha = .5, position = position_nudge(y = .2 ))
 ```
 

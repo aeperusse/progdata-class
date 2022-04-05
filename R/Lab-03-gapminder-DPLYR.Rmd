@@ -54,16 +54,19 @@ gapminder |>
 ```{r}
 gapminder |>
   filter(country %in% "Canada")|>
-  ggplot()|>
-  aes(x = gdpPercap, y = lifeExp) |>
-  geom_point(alpha = 0.1) |>
+  ggplot() + 
+  aes(x = gdpPercap, y = lifeExp) + 
+  geom_point() +
+  scale_size_continuous(name = "title", range = c(4, 8)) +
+    scale_color_continuous(name = "title", aesthetics = c("color", "fill")) +
+  scale_shape_discrete(name = "title")
   scale_x_log10()
 ```
 
 ```{r}
 library(psychTools)
 
-glimpse(psychTools::bfi)
+View(psychTools::bfi)
 ```
 
 ```{r}
