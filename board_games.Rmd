@@ -1,0 +1,35 @@
+---
+title: "coffee"
+author: "Allison Perusse"
+date: "4/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+```
+
+```{r}
+ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv')
+details <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv')
+
+View(ratings)
+View(details)
+```
+```{r}
+joined <- ratings |>
+  left_join(details, by = "id") |>
+  mutate(bayes_average = round(bayes_average, 2)) |>
+  select(name, yearpublished, bayes_average, playingtime, minplayers, maxplayers) |>
+  slice_max(bayes_average, n = 500)
+print(joined)
+
+joined |>
+  filter(name == "Scrabble")
+```
