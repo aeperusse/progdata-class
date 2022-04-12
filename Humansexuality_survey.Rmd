@@ -1,0 +1,40 @@
+---
+title: "Human Sexuality Research Project"
+author: "Allison Perusse"
+date: "4/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(tidyverse)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+library(naniar)
+```
+
+```{r}
+responses <- read_csv(here::here("SOP4777", "humansexuality_surveyresponses.csv"))
+View(responses)
+```
+```{r}
+na_strings <- c("Don't know", "N/A", "None", "Missing")
+
+responses_df <- responses |> replace_with_na_all(condition = ~.x %in% na_strings)
+View(responses_df)
+```
+
+```{r}
+chisq.test(responses_df$vax_status, responses_df$VH2, correct = FALSE)
+```
+
+```{r}
+  cor.test(responses_df$VH4, responses_df$VH7, method = "spearman")
+
+```
+
+```{r}
+```
