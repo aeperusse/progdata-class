@@ -13,6 +13,7 @@ library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
+library(viridis)
 ```
 
 ```{r}
@@ -33,7 +34,8 @@ print(joined)
 ```
 
 ```{r}
-cleaned_board_games <- joined|>
+cleaned_board_games <- joined|> 
+  filter(!is.na(yearpublished), yearpublished > 1800) |>
   mutate(decade = 10 * yearpublished %/% 10) |>
   group_by(decade) |>
   na.omit()
@@ -49,7 +51,6 @@ top_5 = rated_games |>
 how the length of a board game affects their ratings
 ```{r}
 cleaned_board_games |>
-  filter(!is.na(yearpublished), yearpublished > 1800) |>
   ggplot(aes(x = playingtime, y = bayes_average,label = name, fill= as.factor(decade))) +
   geom_jitter(color = "white", pch = 21, alpha = .75, size = 3) +
   labs(fill = "Decade Published") + 
@@ -65,8 +66,34 @@ cleaned_board_games |>
         axis.title.x = element_text(colour="midnightblue",face="bold",size=12, margin=margin(t=25)),
         axis.title.y = element_text(colour="midnightblue",face="bold",size=12, margin=margin(r=25)),
         plot.title = element_text(colour = "midnightblue", size = 15))
+
 ```
 Top 5 board games in each decade
 ```{r}
 top_5 |>
-  ggplot(
+  group_by(decade)|>
+  select(decade, name, bayes_average) |>
+  mutate(index = rank(desc(bayes_average))) |>
+  ggplot(aes(index, bayes_average)) +
+  geom_col(aes(fill = as.factor(decade)), show.legend = F, position = 'dodge') +
+  coord_flip() +
+  scale_fill_brewer(palette = 18) +
+  facet_wrap(~ decade, ncol = 1, strip.position = "left") +
+  theme(plot.background = element_rect(fill = "gray81"),
+  panel.background = element_rect(fill = "gray81"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())+
+   labs(x = NULL, y = "Bayes Average",
+       title = "Top 5 Games By Bayes Average Rating in each Decade")
+  theme(axis.text.y = element_blank(),
+        strip.background = element_rect(fill = "gray75"),
+        strip.text = element_text(size = rel(1.1)),
+        plot.title = element_text(hjust = -0.1))
+        
+
+
+  
+
+  
+
+```
