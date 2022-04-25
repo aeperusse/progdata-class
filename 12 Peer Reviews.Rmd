@@ -1,0 +1,26 @@
+---
+title: "12 Peer Reviews"
+author: "Allison Perusse"
+date: "4/12/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+1. https://github.com/sabeisenberg/progdata-class/issues/5
+2. https://github.com/negarmaleki96/progdata-class/issues/4
+3. https://github.com/reupton/progdata-class/issues/5
+4. https://github.com/avenetto/progdata-class/issues/2
+5. https://github.com/rrorman/progdata-class/issues/3
+6. https://github.com/jayschmidtavendano/progdata-class/issues/3
+7. https://github.com/oujah/progdata-class/issues/4
+8. https://github.com/cassrichardson/progdata-class/issues/2
+9. https://github.com/judesullivan/progdata-class/issues/5
+10. https://github.com/priyacollins/progdata-class/issues/4
+11. https://github.com/shossain7757/progdata-class/issues/6
+12. https://github.com/rrorman/progdata-class/issues/5
+
+```
