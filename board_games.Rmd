@@ -28,7 +28,7 @@ joined <- ratings |>
   mutate(bayes_average = round(bayes_average, 2)) |>
   select(name, rank, yearpublished, bayes_average, users_rated, playingtime, minplayers, maxplayers)|>
   slice_max(bayes_average, n = 500)
-View(joined)
+
 ```
 
 Cleaning the data by filtering it to only include games published after 1800, as well as creating a column sorted by decade.
@@ -68,6 +68,7 @@ cleaned_board_games |>
 
 ```
 Based on the results of this plot, games with shorter play times receive higher consumer ratings. 
+
 ```{r}
 top_5 |>
   group_by(decade)|>
@@ -89,4 +90,6 @@ top_5 |>
         strip.text = element_text(size = rel(1.1)),
         plot.title = element_text(hjust = -0.1))
 ```
+
+
 2010 had the highest top 5 rated games compared to the other decades.
