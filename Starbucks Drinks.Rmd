@@ -1,0 +1,64 @@
+---
+title: "Starbucks"
+author: "Allison Perusse"
+date: "4/25/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+```
+```{r}
+tuesdata <- tidytuesdayR::tt_load('2021-12-21')
+starbucks <- tuesdata$starbucks
+```
+
+```{r}
+coffees <- c("Caffè Latte", "Caffè Mocha", "Caramel Macchiato", "Starbucks Doubleshot on ice", "Flat White", "Cold Brewed Coffee", "Coffee Frappuccino Blended", "Iced Caramel Macchiato")
+
+starbucks_clean <- starbucks |>
+  mutate(milk = recode(milk, "0" = "none", "1" = "nonfat", "2" = "2%", "3" = "soy", "4" = "coconut", "5" = "whole")) |> 
+  filter(product_name %in% coffees, 
+         size %in% c("tall", "grande", "venti")) |> 
+  select(product_name, size, caffeine_mg, calories, milk) |>
+  group_by(product_name, size) 
+```
+
+
+```{r}
+starbucks_clean |> 
+  ggplot(aes(y = product_name, x = milk)) +
+  geom_point(mapping = aes(x=milk, y=reorder(product_name,calories), color = calories), size = 5) +   scale_colour_gradient("Caffeine (mg)", high="#00704A", low="#abd1bc") +
+  labs(title = "How kind of milk impacts calories", x="Type of Milk", y="Specific Coffee") + 
+  theme(plot.background = element_rect(fill = "darkseagreen1", color = "darkseagreen1"), 
+         panel.background = element_rect(fill = "gray100"),
+        legend.background = element_rect(fill = "darkseagreen1"),
+        legend.key = element_rect(fill = "darkseagreen1"), 
+        legend.text = element_text(color = "darkgreen", face = "bold"),
+        legend.title = element_text(color = "darkgreen", face = "bold" ),
+        axis.title.x = element_text(colour="darkgreen",face="bold",size=12, margin=margin(t=25)),
+        axis.title.y = element_text(colour="darkgreen",face="bold",size=12, margin=margin(r=25)),
+        plot.title = element_text(colour = "darkgreen", size = 15))
+```
+
+
+
+The Caffè Mocha is the drink with the most calories, with whole milk being the milk option with the most calories.
+
+
+
+```{r}
+starbucks_clean |> 
+  ggplot(aes(y = product_name, x = size)) +
+  geom_text(mapping = aes(x=size, y=reorder(product_name,caffeine_mg),label = "caffeine",  size= caffeine_mg), fontface="italic", color = "dark green") + 
+  labs(title = "How much caffeine do you want?", x="Size", y="Specific Coffee") 
+```
+
+
+The Venti Starbucks Doubleshot on ice has the most caffeine out of all the drinks I chose to look at. 
