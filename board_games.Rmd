@@ -1,0 +1,95 @@
+---
+title: "board_games"
+author: "Allison Perusse"
+date: "4/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(viridis)
+```
+
+```{r}
+ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv')
+details <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv')
+```
+
+Joining the ratings with the details, and then using slice to only include the top 500 bayes ratings. 
+```{r}
+joined <- ratings |>
+  left_join(details, by = "id") |>
+  mutate(bayes_average = round(bayes_average, 2)) |>
+  select(name, rank, yearpublished, bayes_average, users_rated, playingtime, minplayers, maxplayers)|>
+  slice_max(bayes_average, n = 500)
+
+```
+
+Cleaning the data by filtering it to only include games published after 1800, as well as creating a column sorted by decade.
+```{r}
+cleaned_board_games <- joined|> 
+  filter(!is.na(yearpublished), yearpublished > 1800) |>
+  mutate(decade = 10 * yearpublished %/% 10) |>
+  group_by(decade) |>
+  na.omit()
+
+rated_games = cleaned_board_games |> 
+  filter(users_rated > 1000) |>
+  select(name, decade, bayes_average)
+
+top_5 <- rated_games |> 
+  slice_max(order_by = bayes_average, n = 5, with_ties = F)
+```
+
+how the length of a board game affects their ratings
+```{r}
+cleaned_board_games |>
+  ggplot(aes(x = playingtime, y = bayes_average,label = name, fill= as.factor(decade))) +
+  geom_jitter(color = "white", pch = 21, alpha = .75, size = 3) +
+  labs(fill = "Decade Published") + 
+  labs(x = "Playing Time (Minutes)",
+             y = "Average Bayes Rating",
+        title = "Shorter Play Times Receive Higher Ratings") +
+  theme(plot.background = element_rect(fill = "lavenderblush"),
+        panel.background = element_rect(fill = "snow1"),
+        legend.background = element_rect(fill = "lavenderblush"),
+        legend.key = element_rect(fill = "lavenderblush"), 
+        legend.text = element_text(color = "midnightblue", face = "bold"),
+        legend.title = element_text(color = "midnightblue", face = "bold" ),
+        axis.title.x = element_text(colour="midnightblue",face="bold",size=12, margin=margin(t=25)),
+        axis.title.y = element_text(colour="midnightblue",face="bold",size=12, margin=margin(r=25)),
+        plot.title = element_text(colour = "midnightblue", size = 15))
+
+```
+Based on the results of this plot, games with shorter play times receive higher consumer ratings. 
+
+```{r}
+top_5 |>
+  group_by(decade)|>
+  select(decade, name, bayes_average) |>
+  mutate(index = rank(desc(bayes_average))) |>
+  ggplot(aes(index, bayes_average)) +
+  geom_col(aes(fill = as.factor(decade)), show.legend = F, position = 'dodge') +
+  coord_flip() +
+  scale_fill_brewer(palette = 18) +
+  facet_wrap(~ decade, ncol = 1, strip.position = "left") +
+  theme(plot.background = element_rect(fill = "gray81"),
+  panel.background = element_rect(fill = "gray81"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())+
+   labs(x = NULL, y = "Bayes Average",
+       title = "Top 5 Games By Bayes Average Rating in each Decade") +
+  theme(axis.text.y = element_blank(),
+        strip.background = element_rect(fill = "gray75"),
+        strip.text = element_text(size = rel(1.1)),
+        plot.title = element_text(hjust = -0.1))
+```
+
+
+2010 had the highest top 5 rated games compared to the other decades.
