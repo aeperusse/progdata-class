@@ -19,12 +19,14 @@ library(ggplot2)
 view(gapminder)
 ```
 
+1.1
 ```{r}
 gapminder |>
   filter(country %in% c("Italy","Taiwan", "Sweden") & year == 1970-1979)
 
 ```
-  
+
+1.2
 ```{r}
 gapminder |>
    filter(country %in% c("Italy", "Taiwan", "Sweden") & year == 1970-1979) |> 
@@ -32,6 +34,7 @@ gapminder |>
   print()
 ```
 
+1.3
 ```{r}
 new_gap <- gapminder |> 
   arrange(year) |>
@@ -42,15 +45,16 @@ new_gap <- gapminder |>
   filter(lifeExp_change == min(lifeExp_change))
  print(new_gap)
  
- #how do you specify this to find ONLY the countries that experiences a drop in life exp? Only keep data from countries 
 ```
 
+1.4
 ```{r}
 gapminder |>
   group_by(country)|>
   summarize(max = max(gdpPercap))
 ```
 
+1.5
 ```{r}
 gapminder |>
   filter(country %in% "Canada")|>
@@ -63,16 +67,77 @@ gapminder |>
   scale_x_log10()
 ```
 
-```{r}
-library(psychTools)
+Exercise 2
 
-View(psychTools::bfi)
+2.1
+```{r}
+gapminder |>
+  summarize( mean = mean(lifeExp),
+             sd = sd(lifeExp), 
+             range = range(lifeExp))
 ```
 
 ```{r}
-psychTools::bfi |>
-  group_by()
+gapminder |> 
+  summarize(mean = mean(gdpPercap),
+            sd = sd(gdpPercap), 
+            range = range(gdpPercap))
+```
+
+```{r}
+gapminder |>
+  ggplot(
+    aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(alpha = .5)
+  )
+           
+```
+
+2.2
+
+```{r}
+gapminder |>
+  group_by(continent) |>
+  summarize(mean = mean(lifeExp),
+             sd = sd(lifeExp), 
+             range = range(lifeExp),
+            n = n())
+```
+
+```{r, plot of lifeExp by cont}
+gapminder |>
+  ggplot(aes(x = continent, y = lifeExp, fill = continent, color = continent)) +
+  geom_jitter(height = .5,
+              width = .5,
+              alpha = .3)
+```
+
+```{r, add boxplot}
+gapminder |>
+  ggplot(aes(x = continent, y = lifeExp, fill = continent, color = continent)) +
+  geom_jitter(height = .5,
+              width = .5,
+              alpha = .3) +
+  geom_boxplot(color = "black", 
+               alpha = .1)
+```
 
 
+```{r, raincloud plot}
+gapminder |>
+  ggplot(aes(x = continent, y = lifeExp, fill = continent, color = continent)) +
+  geom_jitter(height = .5,
+              width = .5,
+              alpha = .3) +
+  geom_boxplot(color = "black", 
+               alpha = .5, 
+               width = .5, 
+               size = .5) +
+  ggdist::stat_slab(height = .3, 
+                    color = "black", 
+                    size = .2,
+                    alpha = .5,
+                    position = position_nudge(y = .1))
+```
 
-
+  

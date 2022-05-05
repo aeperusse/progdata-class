@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, read in data}
 dictionary <- readr::read_csv(here::here("data", "green_dictionary.csv"))
 green_data <- readr::read_csv(here::here("data", "green_data.csv"))
 ```
@@ -20,7 +20,8 @@ library(tidyverse)
 library(dplyr)
 ```
 
-```{r}
+1.
+```{r, inspect item responses}
 green_data |>
   pull(open10) |>
   unique()
@@ -31,7 +32,8 @@ green_data |>
   unique()
 ```
 
-```{r}
+2. 
+```{r, computing total scores and recoding}
 green_data<- green_data |>
   mutate(
     across(
@@ -73,7 +75,6 @@ reverse_item <- \(x) recode(x,"1" = 5, "2" = 4, "3" = 3, "4" = 2, "5" = 1)
 
 reverse_item(1:5)
 
-    print(green_data)
 ```
 #\(x) = making a new function
 #for computing total scores, first pull up dictionary
@@ -91,7 +92,8 @@ green_data<- green_data |>
 print(green_data)
 ```
 
-```{r}
+3.
+```{r, rescaling variables}
 (green_data$green_total -1)/(5-1)* 100
 
 green_data<- green_data |>
@@ -105,13 +107,21 @@ green_data<- green_data |>
   )
 print(green_data)
 
+
+```
+
+4. 
+```{r, plots of POMP scored variable}
 ggplot(green_data) +
   aes(x = green_total_pomp)+
   geom_histogram()
 
 green_data |>
   drop_na(student)
+```
 
+5. 
+```{r, scatterplot}
 green_data |>
   filter(!is.na(student))|>
 ggplot()+
@@ -119,15 +129,15 @@ ggplot()+
   factor(student))+
   geom_point()+
   geom_smooth(method = "lm")
+
+  green_data <- green_data |> mutate(green_data, Student = factor(student, levels = c("1", "2"), labels = c("no", "yes")))
+print(green_data)
   
 ```
 ##These plots show that there is no significant difference between students and non-students
 
- 
-```{r}
-  green_data <- green_data |> mutate(green_data, Student = factor(student, levels = c("1", "2"), labels = c("no", "yes")))
-print(green_data)
-
+6. 
+```{r, rainfall }
 green_data |>
   filter(!is.na(Student)) |>
   ggplot() +
@@ -145,7 +155,8 @@ green_data |>
   
 ```
 
-```{r}
+7.
+```{r, summary table}
 green_data |>
   group_by(Student) |>
   summarize(

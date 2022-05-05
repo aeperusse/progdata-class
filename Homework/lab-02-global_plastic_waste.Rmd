@@ -11,8 +11,6 @@ output: html_document
 
 library(tidyverse)
 library(ggplot2)
-library(dplyr)
-library(ggdist)
 ```
 
 ```{r load-data, message=FALSE}
@@ -43,7 +41,8 @@ ggplot(plastic_waste) +
 
 ```{r} 
 ggplot(plastic_waste) +
-  aes(x = continent, y = plastic_waste_per_cap, color = continent) +   geom_jitter(height = 0, width = .4) +
+  aes(x = continent, y = plastic_waste_per_cap, color = continent) +
+geom_jitter(height = 1.5, width = .4) +
   geom_boxplot()
 ```
 
@@ -88,6 +87,8 @@ ggplot(plastic_waste) +
   geom_point(alpha = .5) +
   geom_line()
 ```
+
+
 ```{r plastic-waste-coastal}
 ggplot(plastic_waste) +
   aes(x = plastic_waste_per_cap, y = coastal_pop, color = continent) +
